@@ -10,7 +10,7 @@ load_dotenv()
 class PDFProcessor:
     def __init__(self):
         self.embeddings = HuggingFaceEmbeddings(
-            model_name="sentence-transformers/all-MiniLM-L6-v2"
+            model_name="sentence-transformers/paraphrase-MiniLM-L3-v2"
         )
         self.text_splitter = RecursiveCharacterTextSplitter(
             chunk_size=1000,
