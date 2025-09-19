@@ -37,7 +37,7 @@ class ChatHandler:
         
         if self._is_personal_question(message):
             response = self._handle_personal_question(message, session)
-        elif session.get("vector_store") and self._is_document_question(message):
+        elif session.get("pdf_text") and self._is_document_question(message):
             response = self._handle_document_question(message, session)
         else:
             response = self._handle_general_question(message)
@@ -102,14 +102,10 @@ class ChatHandler:
     
     def _handle_document_question(self, message: str, session: dict) -> str:
         try:
-            retriever = session["vector_store"].as_retriever(
-                search_type="mmr",
-                search_kwargs={"k": 4, "fetch_k": 6}
-            )
-            docs = retriever.get_relevant_documents(message)
-            
-            if docs:
-                context = "\n\n".join([doc.page_content[:300] for doc in docs])
+            pdf_text = session.get("pdf_text", "")
+            if pdf_text:
+                # Use first 2000 characters to stay within token limits
+                context = pdf_text[:2000]
                 filename = session.get("filename", "documents")
                 prompt = (
                     f"You are a knowledgeable AI assistant helping users understand documents. Based on the context provided from {filename}, give a detailed and comprehensive explanation. Provide 4-5 lines of explanation, include relevant details, examples, and context to help the user fully understand the topic.\n\n"

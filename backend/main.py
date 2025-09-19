@@ -68,8 +68,8 @@ async def upload_pdf(file: UploadFile = File(...), session_id: str = Form(None))
         with open(file_path, "wb") as f:
             f.write(content)
         
-        vector_store = pdf_processor.process_pdf(file_path)
-        session = session_manager.update_session_with_pdf(session_id, vector_store, file.filename)
+        pdf_text = pdf_processor.process_pdf(file_path)
+        session = session_manager.update_session_with_pdf(session_id, pdf_text, file.filename)
         
         main_logger.info(f"PDF processed: {file.filename}")
         return {"session_id": session_id, "filename": session.get("filename", file.filename)}
@@ -100,7 +100,7 @@ async def get_chat_history(session_id: str):
     return {
         "history": session.get("chat_history", []),
         "filename": session.get("filename", ""),
-        "has_vector_store": bool(session.get("vector_store"))
+        "has_pdf_text": bool(session.get("pdf_text"))
     }
 
 @app.get("/health")

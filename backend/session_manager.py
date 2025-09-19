@@ -7,10 +7,10 @@ from typing import Optional, Dict, Any
 storage = PersistentStorage()
 active_sessions: Dict[str, Dict[str, Any]] = {}
 
-def create_session(session_id: str, vector_store, filename: str) -> Dict[str, Any]:
+def create_session(session_id: str, pdf_text, filename: str) -> Dict[str, Any]:
     session_data = {
         "session_id": session_id,
-        "vector_store": vector_store,
+        "pdf_text": pdf_text,
         "filename": filename or "General Chat",
         "chat_history": [],
         "created_at": time.time(),
@@ -22,11 +22,11 @@ def create_session(session_id: str, vector_store, filename: str) -> Dict[str, An
     
     return session_data
 
-def update_session_with_pdf(session_id: str, vector_store, filename: str) -> Dict[str, Any]:
+def update_session_with_pdf(session_id: str, pdf_text, filename: str) -> Dict[str, Any]:
     session = get_session(session_id)
     
     if session:
-        session["vector_store"] = vector_store
+        session["pdf_text"] = pdf_text
         
         old_filename = session.get("filename", "")
         if old_filename and old_filename != "General Chat":
@@ -42,7 +42,7 @@ def update_session_with_pdf(session_id: str, vector_store, filename: str) -> Dic
         storage.save_session(session_id, session)
         return session
     
-    return create_session(session_id, vector_store, filename)
+    return create_session(session_id, pdf_text, filename)
 
 def get_session(session_id: str) -> Optional[Dict[str, Any]]:
     if session_id in active_sessions:
