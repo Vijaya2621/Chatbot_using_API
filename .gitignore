@@ -1,0 +1,40 @@
+# Dependencies
+node_modules/
+*/node_modules/
+
+# Python
+__pycache__/
+*/__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.env
+venv/
+.venv/
+env/
+
+# Build outputs
+build/
+dist/
+*.log
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Project specific
+uploads/
+data/
+logs/
+*.pdf
+
+# Environment files
+.env
+.env.local
+.env.production
